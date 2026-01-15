@@ -96,7 +96,6 @@
 	<div
 		class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(var(--color-gold)_1px,transparent_1px)] bg-size-[30px_30px] opacity-40"
 	></div>
-	<div class="bg-pattern"></div>
 	<header class="px-4 pt-12 pb-4 text-center">
 		<div
 			class="mx-auto mb-4 flex h-12 w-12 rotate-45 items-center justify-center rounded-lg bg-vermilion font-['Shippori_Mincho',serif] text-xl text-white shadow-lg shadow-vermilion/30"
@@ -192,7 +191,7 @@
 					</div>
 					<div class="meter-bar mt-4 h-1.5 overflow-hidden rounded bg-gray-300">
 						<div
-							class="fill bg-leniar-to-r h-full rounded from-pink-300 to-vermilion transition-all duration-1000 ease-out"
+							class="fill h-full rounded bg-linear-to-r from-pink-300 to-vermilion transition-all duration-1000 ease-out"
 							style="width: {result.score * 10}%"
 						></div>
 					</div>
@@ -300,16 +299,3 @@
 		© 2026 Enmusubi. All rights reserved.
 	</footer>
 </div>
-
-<style>
-	/* Pattern Overlay */
-	.bg-pattern {
-		position: absolute;
-		inset: 0;
-		opacity: 0.4;
-		background-image: radial-gradient(var(--c-gold) 1px, transparent 1px);
-		background-size: 30px 30px;
-		z-index: -1;
-		pointer-events: none;
-	}
-</style>
