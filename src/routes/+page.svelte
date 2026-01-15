@@ -1,577 +1,315 @@
 <script lang="ts">
-    import { fly, fade, slide } from 'svelte/transition';
+	import { fly, fade, slide } from 'svelte/transition';
 
-    // --- 1. DATA TIER ---
-    interface Profile {
-        id?: string;
-        title: string;
-        kanji: string;
-        traits: string[];
-    }
+	// --- 1. DATA TIER ---
+	interface Profile {
+		id?: string;
+		title: string;
+		kanji: string;
+		traits: string[];
+	}
 
-    const PROFILES: Record<string, Profile> = {
-        'C46': { kanji: '心', title: '純粋な心 (The Heart)', traits: ['感受性豊かで、愛することに一切の妥協なし','相手の色に染まりやすく、献身的な愛を注ぐ','実は独占欲が強く、寂しがりやな一面も','心の拠り所を見つけると、無敵の強さを発揮'] },
-        'C28': { kanji: '陽', title: '天真爛漫な太陽 (The Sun)', traits: ['盛り上げ上手で周囲を明るくする天才','天下無双のバイタリティで突き進む','注目度はピカイチ！華があって目立っちゃう','その一方で実はデリケート。人生ドラマチック'] },
-        'C03': { kanji: '結', id: 'C03', title: '不屈の結び目 (The Knot)', traits: ['一度決めたら離さない、驚異の粘り強さ','「安定」こそが最大の幸福と信じている','身内枠に認定したら、徹底的に守り抜く','変化には弱いが、継続させる力は世界一'] },
-        'C30': { kanji: '月', title: '神秘の月 (The Moon)', traits: ['直感力に優れ、相手の本音を見抜く名人','ミステリアスな雰囲気で人を惹きつける','気分屋に見えて、実は深い愛の持ち主','夜の静寂の中で、本当の自分を解放する'] },
-    };
+	const PROFILES: Record<string, Profile> = {
+		C46: {
+			kanji: '心',
+			title: '純粋な心 (The Heart)',
+			traits: [
+				'感受性豊かで、愛することに一切の妥協なし',
+				'相手の色に染まりやすく、献身的な愛を注ぐ',
+				'実は独占欲が強く、寂しがりやな一面も',
+				'心の拠り所を見つけると、無敵の強さを発揮'
+			]
+		},
+		C28: {
+			kanji: '陽',
+			title: '天真爛漫な太陽 (The Sun)',
+			traits: [
+				'盛り上げ上手で周囲を明るくする天才',
+				'天下無双のバイタリティで突き進む',
+				'注目度はピカイチ！華があって目立っちゃう',
+				'その一方で実はデリケート。人生ドラマチック'
+			]
+		},
+		C03: {
+			kanji: '結',
+			id: 'C03',
+			title: '不屈の結び目 (The Knot)',
+			traits: [
+				'一度決めたら離さない、驚異の粘り強さ',
+				'「安定」こそが最大の幸福と信じている',
+				'身内枠に認定したら、徹底的に守り抜く',
+				'変化には弱いが、継続させる力は世界一'
+			]
+		},
+		C30: {
+			kanji: '月',
+			title: '神秘の月 (The Moon)',
+			traits: [
+				'直感力に優れ、相手の本音を見抜く名人',
+				'ミステリアスな雰囲気で人を惹きつける',
+				'気分屋に見えて、実は深い愛の持ち主',
+				'夜の静寂の中で、本当の自分を解放する'
+			]
+		}
+	};
 
-    // --- 2. STATE ---
-    let uBirth = $state('2000-01-01');
-    let pBirth = $state('2000-01-02');
-    let isCalculating = $state(false);
-    let result = $state<any>(null);
+	// --- 2. STATE ---
+	let uBirth = $state('2000-01-01');
+	let pBirth = $state('2000-01-02');
+	let isCalculating = $state(false);
+	let result = $state<any>(null);
 
-    function getCard(date: string) {
-        // Simple logic mock
-        const sum = date.replace(/\D/g, '').split('').reduce((acc, n) => acc + parseInt(n), 0);
-        const keys = Object.keys(PROFILES);
-        return PROFILES[keys[sum % keys.length]];
-    }
+	function getCard(date: string) {
+		// Simple logic mock
+		const sum = date
+			.replace(/\D/g, '')
+			.split('')
+			.reduce((acc, n) => acc + parseInt(n), 0);
+		const keys = Object.keys(PROFILES);
+		return PROFILES[keys[sum % keys.length]];
+	}
 
-    async function runAppraisal() {
-        isCalculating = true;
-        // Simulate "Ritual" time
-        await new Promise(r => setTimeout(r, 2000));
-        
-        result = {
-            user: getCard(uBirth),
-            partner: getCard(pBirth),
-            compatibility: "相手の自信に満ちた雰囲気に夢中になりやすい関係。好きだからといって何でも従うのではなく、自分の意見も大切に。",
-            score: 7 
-        };
-        isCalculating = false;
-    }
+	async function runAppraisal() {
+		isCalculating = true;
+		// Simulate "Ritual" time
+		await new Promise((r) => setTimeout(r, 2000));
 
-    function reset() {
-        result = null;
-        isCalculating = false;
-    }
+		result = {
+			user: getCard(uBirth),
+			partner: getCard(pBirth),
+			compatibility:
+				'相手の自信に満ちた雰囲気に夢中になりやすい関係。好きだからといって何でも従うのではなく、自分の意見も大切に。',
+			score: 7
+		};
+		isCalculating = false;
+	}
+
+	function reset() {
+		result = null;
+		isCalculating = false;
+	}
 </script>
 
-<div class="main-container">
-    <div class="bg-pattern"></div>
+<div
+	class="relative flex min-h-screen flex-col overflow-x-hidden bg-bg font-['Zen_Kaku_Gothic_New',sans-serif] text-dark"
+>
+	<div
+		class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(var(--color-gold)_1px,transparent_1px)] bg-size-[30px_30px] opacity-40"
+	></div>
+	<div class="bg-pattern"></div>
+	<header class="px-4 pt-12 pb-4 text-center">
+		<div
+			class="mx-auto mb-4 flex h-12 w-12 rotate-45 items-center justify-center rounded-lg bg-vermilion font-['Shippori_Mincho',serif] text-xl text-white shadow-lg shadow-vermilion/30"
+		>
+			縁
+		</div>
+		<h1 class="m-0 font-['Shippori_Mincho',serif] text-xl tracking-wider text-vermilion">
+			縁結び相性診断
+		</h1>
+		<p class="mt-2 text-xs tracking-widest text-gray-500 uppercase">DESTINY APPRAISAL</p>
+	</header>
 
-    <header class="header">
-        <div class="logo-mark">縁</div>
-        <h1 class="title">縁結び相性診断</h1>
-        <p class="subtitle">DESTINY APPRAISAL</p>
-    </header>
+	<main class="relative mx-auto w-full max-w-3xl flex-1 p-4 pb-16">
+		{#if isCalculating}
+			<div
+				class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/90"
+				in:fade
+			>
+				<div
+					class="h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-vermilion"
+				></div>
+				<p class="mt-4 animate-pulse font-['Shippori_Mincho',serif] text-vermilion">
+					運命を紐解いています...
+				</p>
+			</div>
+		{:else if !result}
+			<div class="input-section" in:fly={{ y: 20, duration: 600 }}>
+				<div class="card-couple flex flex-col gap-0 md:flex-row md:items-center md:gap-4">
+					<div
+						class="input-card relative flex-1 rounded-none border border-gray-50 bg-paper p-8 text-center shadow-card transition-transform focus-within:border-vermilion focus-within:shadow-soft"
+					>
+						<div
+							class="icon-stamp user-stamp mx-auto mb-4 flex h-8 w-8 items-center justify-center rounded-full bg-gray-800 font-['Shippori_Mincho',serif] text-sm text-white"
+						>
+							私
+						</div>
+						<h2 class="label mb-2 text-sm font-bold text-gray-500">あなたの生年月日</h2>
+						<div
+							class="date-wrapper border-b-2 border-gray-300 transition-all focus-within:border-vermilion"
+						>
+							<input
+								type="date"
+								bind:value={uBirth}
+								class="date-input w-full border-none bg-transparent p-2 text-center font-['Shippori_Mincho',serif] text-lg text-dark outline-none"
+							/>
+						</div>
+					</div>
 
-    <main class="content-area">
-        {#if isCalculating}
-            <div class="loading-state" in:fade>
-                <div class="spinner-knot"></div>
-                <p class="animate-pulse text-vermilion mt-4 font-serif">運命を紐解いています...</p>
-            </div>
+					<div
+						class="connection-knot z-10 -my-2.5 flex flex-col items-center justify-center text-vermilion md:-mx-5 md:flex-row"
+					>
+						<span class="line h-5 w-0.5 bg-gray-300 md:h-0.5 md:w-5"></span>
+						<span class="heart bg-white px-1.5 text-lg">♥</span>
+						<span class="line h-5 w-0.5 bg-gray-300 md:h-0.5 md:w-5"></span>
+					</div>
 
-        {:else if !result}
-            <div class="input-section" in:fly={{ y: 20, duration: 600 }}>
-                <div class="card-couple">
-                    <div class="input-card">
-                        <div class="icon-stamp user-stamp">私</div>
-                        <h2 class="label">あなたの生年月日</h2>
-                        <div class="date-wrapper">
-                            <input type="date" bind:value={uBirth} class="date-input">
-                        </div>
-                    </div>
+					<div
+						class="input-card relative flex-1 rounded-none border border-gray-50 bg-paper p-8 text-center shadow-card transition-transform focus-within:border-vermilion focus-within:shadow-soft"
+					>
+						<div
+							class="icon-stamp partner-stamp mx-auto mb-4 flex h-8 w-8 items-center justify-center rounded-full bg-vermilion font-['Shippori_Mincho',serif] text-sm text-white"
+						>
+							彼
+						</div>
+						<h2 class="label mb-2 text-sm font-bold text-gray-500">相手の生年月日</h2>
+						<div
+							class="date-wrapper border-b-2 border-gray-300 transition-all focus-within:border-vermilion"
+						>
+							<input
+								type="date"
+								bind:value={pBirth}
+								class="date-input w-full border-none bg-transparent p-2 text-center font-['Shippori_Mincho',serif] text-lg text-dark outline-none"
+							/>
+						</div>
+					</div>
+				</div>
 
-                    <div class="connection-knot">
-                        <span class="line"></span>
-                        <span class="heart">♥</span>
-                        <span class="line"></span>
-                    </div>
+				<button
+					onclick={runAppraisal}
+					class="relative mt-8 block w-full cursor-pointer overflow-hidden rounded-md border-none bg-vermilion p-6 text-base font-bold tracking-wider text-white shadow-lg shadow-vermilion/40 transition-transform active:scale-95"
+				>
+					<span class="btn-text">相性を診断する</span>
+					<span class="btn-shine"></span>
+				</button>
+			</div>
+		{:else}
+			<div class="results-section" in:fly={{ y: 50, duration: 800 }}>
+				<div class="score-card mb-12 rounded-xl bg-white p-8 text-center shadow-card">
+					<div class="score-label mb-2 text-sm text-gray-500">二人の相性</div>
+					<div class="score-display font-['Shippori_Mincho',serif] leading-none text-vermilion">
+						<span class="score-num text-6xl font-bold">{result.score * 10}</span>
+						<span class="score-unit text-xl">%</span>
+					</div>
+					<div class="meter-bar mt-4 h-1.5 overflow-hidden rounded bg-gray-300">
+						<div
+							class="fill bg-leniar-to-r h-full rounded from-pink-300 to-vermilion transition-all duration-1000 ease-out"
+							style="width: {result.score * 10}%"
+						></div>
+					</div>
+				</div>
 
-                    <div class="input-card">
-                        <div class="icon-stamp partner-stamp">彼</div>
-                        <h2 class="label">相手の生年月日</h2>
-                        <div class="date-wrapper">
-                            <input type="date" bind:value={pBirth} class="date-input">
-                        </div>
-                    </div>
-                </div>
+				<div class="cards-grid grid grid-cols-1 gap-6 md:grid-cols-2">
+					<div
+						class="result-card user-bg relative overflow-hidden border border-gray-50 bg-white p-8 shadow-card before:absolute before:top-0 before:right-0 before:left-0 before:h-1 before:bg-gray-800"
+					>
+						<div
+							class="watermark pointer-events-none absolute -top-2.5 -right-2.5 font-['Shippori_Mincho',serif] text-8xl font-bold opacity-5"
+						>
+							{result.user.kanji}
+						</div>
+						<div class="card-header mb-4 flex items-center justify-between">
+							<span
+								class="role-badge rounded bg-gray-100 px-2 py-0.5 text-xs font-bold text-gray-600"
+								>あなた</span
+							>
+							<div class="birth-display font-['Inter',sans-serif] text-sm text-gray-400">
+								{uBirth.replace(/-/g, '.')}
+							</div>
+						</div>
+						<h3
+							class="card-title m-0 border-b border-dashed border-gray-300 pb-2 font-['Shippori_Mincho',serif] text-xl"
+						>
+							{result.user.title}
+						</h3>
+						<ul class="trait-list m-0 list-none p-0">
+							{#each result.user.traits as trait}
+								<li
+									class="relative mb-2 pl-4 text-sm leading-relaxed before:absolute before:left-0 before:text-vermilion before:content-['•']"
+								>
+									{trait}
+								</li>
+							{/each}
+						</ul>
+					</div>
 
-                <button onclick={runAppraisal} class="cta-button">
-                    <span class="btn-text">相性を診断する</span>
-                    <span class="btn-shine"></span>
-                </button>
-            </div>
+					<div
+						class="result-card partner-bg relative overflow-hidden border border-gray-50 bg-white p-8 shadow-card before:absolute before:top-0 before:right-0 before:left-0 before:h-1 before:bg-vermilion"
+					>
+						<div
+							class="watermark pointer-events-none absolute -top-2.5 -right-2.5 font-['Shippori_Mincho',serif] text-8xl font-bold opacity-5"
+						>
+							{result.partner.kanji}
+						</div>
+						<div class="card-header mb-4 flex items-center justify-between">
+							<span
+								class="role-badge rounded bg-gray-100 px-2 py-0.5 text-xs font-bold text-gray-600"
+								>相手</span
+							>
+							<div class="birth-display font-['Inter',sans-serif] text-sm text-gray-400">
+								{pBirth.replace(/-/g, '.')}
+							</div>
+						</div>
+						<h3
+							class="card-title m-0 border-b border-dashed border-gray-300 pb-2 font-['Shippori_Mincho',serif] text-xl"
+						>
+							{result.partner.title}
+						</h3>
+						<ul class="trait-list m-0 list-none p-0">
+							{#each result.partner.traits as trait}
+								<li
+									class="relative mb-2 pl-4 text-sm leading-relaxed before:absolute before:left-0 before:text-vermilion before:content-['•']"
+								>
+									{trait}
+								</li>
+							{/each}
+						</ul>
+					</div>
+				</div>
 
-        {:else}
-            <div class="results-section" in:fly={{ y: 50, duration: 800 }}>
-                
-                <div class="score-card">
-                    <div class="score-label">二人の相性</div>
-                    <div class="score-display">
-                        <span class="score-num">{result.score * 10}</span>
-                        <span class="score-unit">%</span>
-                    </div>
-                    <div class="meter-bar">
-                        <div class="fill" style="width: {result.score * 10}%"></div>
-                    </div>
-                </div>
+				<div
+					class="advice-scroll mt-12 border-l-4 border-vermilion bg-white bg-[url('https://www.transparenttextures.com/patterns/handmade-paper.png')] p-8 shadow-card"
+				>
+					<h3 class="advice-title m-0 mb-2 font-['Shippori_Mincho',serif] text-vermilion">
+						天の声
+					</h3>
+					<p class="advice-text text-base leading-relaxed text-gray-600">{result.compatibility}</p>
+				</div>
 
-                <div class="cards-grid">
-                    <div class="result-card user-bg">
-                        <div class="watermark">{result.user.kanji}</div>
-                        <div class="card-header">
-                            <span class="role-badge">あなた</span>
-                            <div class="birth-display">{uBirth.replace(/-/g, '.')}</div>
-                        </div>
-                        <h3 class="card-title">{result.user.title}</h3>
-                        <ul class="trait-list">
-                            {#each result.user.traits as trait}
-                                <li>{trait}</li>
-                            {/each}
-                        </ul>
-                    </div>
+				<div class="actions mt-12 text-center">
+					<div class="share-buttons mb-8 flex justify-center gap-2.5">
+						<button
+							class="share x cursor-pointer rounded-full border-none bg-black px-6 py-2.5 text-sm font-bold text-white"
+							>Post</button
+						>
+						<button
+							class="share line cursor-pointer rounded-full border-none bg-green-500 px-6 py-2.5 text-sm font-bold text-white"
+							>LINE</button
+						>
+					</div>
+					<button
+						onclick={reset}
+						class="retry-btn cursor-pointer border-none bg-none text-sm text-gray-500 underline"
+						>もう一度占う</button
+					>
+				</div>
+			</div>
+		{/if}
+	</main>
 
-                    <div class="result-card partner-bg">
-                        <div class="watermark">{result.partner.kanji}</div>
-                        <div class="card-header">
-                            <span class="role-badge">相手</span>
-                            <div class="birth-display">{pBirth.replace(/-/g, '.')}</div>
-                        </div>
-                        <h3 class="card-title">{result.partner.title}</h3>
-                        <ul class="trait-list">
-                            {#each result.partner.traits as trait}
-                                <li>{trait}</li>
-                            {/each}
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="advice-scroll">
-                    <h3 class="advice-title">天の声</h3>
-                    <p class="advice-text">{result.compatibility}</p>
-                </div>
-
-                <div class="actions">
-                    <div class="share-buttons">
-                        <button class="share x">Post</button>
-                        <button class="share line">LINE</button>
-                    </div>
-                    <button onclick={reset} class="retry-btn">もう一度占う</button>
-                </div>
-            </div>
-        {/if}
-    </main>
-
-    <footer class="footer">
-        © 2026 Enmusubi. All rights reserved.
-    </footer>
+	<footer class="py-8 text-center text-xs text-gray-400">
+		© 2026 Enmusubi. All rights reserved.
+	</footer>
 </div>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
-
-    /* --- VARIABLES & BASE --- */
-    :global(:root) {
-        --c-vermilion: #BC2B33; /* Traditional Shrine Red */
-        --c-dark: #2c2c2c;
-        --c-gold: #C5A059;
-        --c-bg: #F9F8F4; /* Washi Paper White */
-        --c-paper: #ffffff;
-        --shadow-soft: 0 10px 30px -10px rgba(188, 43, 51, 0.15);
-        --shadow-card: 0 4px 12px rgba(0,0,0,0.05);
-    }
-
-    :global(body) {
-        margin: 0;
-        background-color: var(--c-bg);
-        color: var(--c-dark);
-        font-family: 'Zen Kaku Gothic New', sans-serif;
-    }
-
-    .main-container {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        overflow-x: hidden;
-    }
-
-    /* Pattern Overlay */
-    .bg-pattern {
-        position: absolute;
-        inset: 0;
-        opacity: 0.4;
-        background-image: radial-gradient(var(--c-gold) 1px, transparent 1px);
-        background-size: 30px 30px;
-        z-index: -1;
-        pointer-events: none;
-    }
-
-    /* --- HEADER --- */
-    .header {
-        text-align: center;
-        padding: 3rem 1rem 1rem;
-    }
-
-    .logo-mark {
-        width: 48px;
-        height: 48px;
-        background: var(--c-vermilion);
-        color: white;
-        font-family: 'Shippori Mincho', serif;
-        font-size: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1rem;
-        border-radius: 8px; /* Slightly rounded square */
-        transform: rotate(45deg);
-        box-shadow: 0 4px 10px rgba(188, 43, 51, 0.3);
-    }
-    
-    .logo-mark::after {
-        content: ''; 
-        display:block; 
-        transform: rotate(-45deg); /* Text straight */
-    }
-
-    .title {
-        font-family: 'Shippori Mincho', serif;
-        font-size: 1.8rem;
-        letter-spacing: 0.1em;
-        color: var(--c-vermilion);
-        margin: 0;
-    }
-
-    .subtitle {
-        font-size: 0.6rem;
-        letter-spacing: 0.4em;
-        color: #999;
-        margin-top: 0.5rem;
-        text-transform: uppercase;
-    }
-
-    /* --- MAIN AREA --- */
-    .content-area {
-        flex: 1;
-        max-width: 600px;
-        width: 100%;
-        margin: 0 auto;
-        padding: 1rem 1.5rem 4rem;
-        position: relative;
-    }
-
-    /* --- INPUT FORM --- */
-    .card-couple {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-    }
-
-    @media (min-width: 640px) {
-        .card-couple {
-            flex-direction: row;
-            align-items: center;
-            gap: 1rem;
-        }
-    }
-
-    .input-card {
-        background: var(--c-paper);
-        border: 1px solid rgba(0,0,0,0.05);
-        padding: 2rem;
-        border-radius: 2px;
-        position: relative;
-        flex: 1;
-        text-align: center;
-        box-shadow: var(--shadow-card);
-        transition: transform 0.3s;
-    }
-
-    .input-card:focus-within {
-        border-color: var(--c-vermilion);
-        box-shadow: var(--shadow-soft);
-    }
-
-    .icon-stamp {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Shippori Mincho', serif;
-        font-size: 0.9rem;
-        margin: 0 auto 1rem;
-        color: white;
-    }
-    .user-stamp { background: #333; }
-    .partner-stamp { background: var(--c-vermilion); }
-
-    .label {
-        font-size: 0.85rem;
-        color: #888;
-        margin-bottom: 0.5rem;
-        font-weight: bold;
-    }
-
-    .date-wrapper {
-        border-bottom: 2px solid #eee;
-        transition: 0.3s;
-    }
-    .input-card:focus-within .date-wrapper {
-        border-bottom-color: var(--c-vermilion);
-    }
-
-    .date-input {
-        width: 100%;
-        border: none;
-        padding: 0.5rem;
-        text-align: center;
-        font-size: 1.1rem;
-        font-family: 'Shippori Mincho', serif;
-        outline: none;
-        background: transparent;
-        color: var(--c-dark);
-    }
-
-    /* The Knot connector */
-    .connection-knot {
-        display: flex;
-        flex-direction: column; /* Mobile: Vertical */
-        align-items: center;
-        justify-content: center;
-        color: var(--c-vermilion);
-        margin: -10px 0;
-        z-index: 10;
-    }
-    @media (min-width: 640px) {
-        .connection-knot {
-            flex-direction: row; /* Desktop: Horizontal */
-            margin: 0 -20px;
-        }
-    }
-
-    .line {
-        width: 2px;
-        height: 20px;
-        background: #eee;
-    }
-    @media (min-width: 640px) {
-        .line { width: 20px; height: 2px; }
-    }
-    .heart {
-        background: white;
-        padding: 0 5px;
-        font-size: 1.2rem;
-    }
-
-    /* CTA Button */
-    .cta-button {
-        display: block;
-        width: 100%;
-        margin-top: 2rem;
-        background: var(--c-vermilion);
-        color: white;
-        border: none;
-        padding: 1.2rem;
-        font-size: 1rem;
-        font-weight: 700;
-        letter-spacing: 0.2em;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        border-radius: 4px;
-        box-shadow: 0 4px 15px rgba(188, 43, 51, 0.4);
-        transition: transform 0.2s;
-    }
-
-    .cta-button:active { transform: scale(0.98); }
-
-    /* --- RESULTS --- */
-    .score-card {
-        text-align: center;
-        margin-bottom: 3rem;
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: var(--shadow-card);
-    }
-
-    .score-label {
-        font-size: 0.9rem;
-        color: #888;
-        margin-bottom: 0.5rem;
-    }
-    .score-display {
-        color: var(--c-vermilion);
-        font-family: 'Shippori Mincho', serif;
-        line-height: 1;
-    }
-    .score-num { font-size: 4rem; font-weight: bold; }
-    .score-unit { font-size: 1.5rem; }
-
-    .meter-bar {
-        height: 6px;
-        background: #eee;
-        border-radius: 3px;
-        margin-top: 1rem;
-        overflow: hidden;
-    }
-    .fill {
-        height: 100%;
-        background: linear-gradient(90deg, #FF8E96, var(--c-vermilion));
-        border-radius: 3px;
-        transition: width 1s ease-out;
-    }
-
-    .cards-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    @media (min-width: 640px) { .cards-grid { grid-template-columns: 1fr 1fr; } }
-
-    .result-card {
-        background: white;
-        padding: 2rem;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid rgba(0,0,0,0.05);
-        box-shadow: var(--shadow-card);
-    }
-    .result-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; height: 4px;
-    }
-    .user-bg::before { background: #333; }
-    .partner-bg::before { background: var(--c-vermilion); }
-
-    .watermark {
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        font-family: 'Shippori Mincho', serif;
-        font-size: 8rem;
-        opacity: 0.05;
-        font-weight: bold;
-        pointer-events: none;
-    }
-
-    .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-    .role-badge {
-        font-size: 0.7rem;
-        font-weight: bold;
-        padding: 2px 8px;
-        border-radius: 4px;
-        background: #f0f0f0;
-        color: #555;
-    }
-    .birth-display { font-size: 0.8rem; color: #aaa; font-family: 'Inter', sans-serif; }
-
-    .card-title {
-        font-family: 'Shippori Mincho', serif;
-        font-size: 1.25rem;
-        margin: 0 0 1rem 0;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px dashed #eee;
-    }
-
-    .trait-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .trait-list li {
-        font-size: 0.85rem;
-        line-height: 1.6;
-        margin-bottom: 0.5rem;
-        padding-left: 1rem;
-        position: relative;
-    }
-    .trait-list li::before {
-        content: '•';
-        color: var(--c-vermilion);
-        position: absolute;
-        left: 0;
-    }
-
-    .advice-scroll {
-        margin-top: 3rem;
-        padding: 2rem;
-        background-color: #fff;
-        background-image: url("https://www.transparenttextures.com/patterns/handmade-paper.png");
-        border-left: 4px solid var(--c-vermilion);
-        box-shadow: var(--shadow-card);
-    }
-    .advice-title {
-        font-family: 'Shippori Mincho', serif;
-        margin: 0 0 0.5rem;
-        color: var(--c-vermilion);
-    }
-    .advice-text {
-        font-size: 0.95rem;
-        line-height: 1.8;
-        color: #444;
-    }
-
-    .actions {
-        margin-top: 3rem;
-        text-align: center;
-    }
-    .share-buttons {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin-bottom: 2rem;
-    }
-    .share {
-        padding: 10px 24px;
-        color: white;
-        border: none;
-        border-radius: 50px;
-        font-size: 0.9rem;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    .x { background: #000; }
-    .line { background: #06C755; }
-
-    .retry-btn {
-        background: none;
-        border: none;
-        color: #999;
-        text-decoration: underline;
-        font-size: 0.85rem;
-        cursor: pointer;
-    }
-
-    /* --- LOADING --- */
-    .loading-state {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255,255,255,0.9);
-        z-index: 50;
-    }
-    .spinner-knot {
-        width: 50px;
-        height: 50px;
-        border: 4px solid #eee;
-        border-top-color: var(--c-vermilion);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .footer {
-        text-align: center;
-        font-size: 0.7rem;
-        color: #ccc;
-        padding: 2rem;
-    }
+	/* Pattern Overlay */
+	.bg-pattern {
+		position: absolute;
+		inset: 0;
+		opacity: 0.4;
+		background-image: radial-gradient(var(--c-gold) 1px, transparent 1px);
+		background-size: 30px 30px;
+		z-index: -1;
+		pointer-events: none;
+	}
 </style>

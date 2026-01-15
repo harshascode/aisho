@@ -1,2 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+
+@theme {
+  --color-vermilion: #BC2B33;
+  --color-dark: #2c2c2c;
+  --color-gold: #C5A059;
+  --color-bg: #F9F8F4;
+  --color-paper: #ffffff;
+  --shadow-soft: 0 10px 30px -10px rgba(188, 43, 51, 0.15);
+  --shadow-card: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+body {
+  margin: 0;
+}
