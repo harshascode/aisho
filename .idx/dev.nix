@@ -8,6 +8,7 @@
     pkgs.go
     pkgs.nodejs_20
     pkgs.nodePackages.nodemon
+    pkgs.bun
   ];
   # Sets environment variables in the workspace
   env = {};
