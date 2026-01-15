@@ -18,7 +18,7 @@
 
     // --- 2. STATE ---
     let uBirth = $state('2000-01-01');
-    let pBirth = $state('2000-01-01');
+    let pBirth = $state('2000-01-02');
     let isCalculating = $state(false);
     let result = $state<any>(null);
 
