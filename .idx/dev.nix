@@ -6,7 +6,7 @@
   # Use https://search.nixos.org/packages to find packages
   packages = [
     pkgs.go
-    pkgs.nodejs_20
+    pkgs.nodejs_21
     pkgs.nodePackages.nodemon
     pkgs.bun
   ];
