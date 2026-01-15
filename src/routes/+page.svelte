@@ -96,6 +96,23 @@
 	<div
 		class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(var(--color-gold)_1px,transparent_1px)] bg-size-[30px_30px] opacity-40"
 	></div>
+	<nav class="bg-vermilion p-4 shadow-md">
+		<div class="mx-auto flex max-w-6xl items-center justify-between">
+			<div class="text-white font-['Shippori_Mincho',serif] text-lg font-bold">Enmusubi</div>
+			<ul class="hidden md:flex space-x-6">
+				<li><a href="#" class="text-white hover:text-gold transition-colors">Home</a></li>
+				<li><a href="#" class="text-white hover:text-gold transition-colors">About</a></li>
+				<li><a href="#" class="text-white hover:text-gold transition-colors">Contact</a></li>
+			</ul>
+			<div class="md:hidden">
+				<button class="text-white focus:outline-none">
+					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+					</svg>
+				</button>
+			</div>
+		</div>
+	</nav>
 	<header class="px-4 pt-12 pb-4 text-center">
 		<div
 			class="mx-auto mb-4 flex h-12 w-12 rotate-45 items-center justify-center rounded-lg bg-vermilion font-['Shippori_Mincho',serif] text-xl text-white shadow-lg shadow-vermilion/30"
