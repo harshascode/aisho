@@ -6,6 +6,7 @@
 		id?: string;
 		title: string;
 		kanji: string;
+		image: string;
 		traits: string[];
 	}
 
@@ -13,6 +14,7 @@
 		C46: {
 			kanji: '心',
 			title: '純粋な心 (The Heart)',
+			image: '/the_heart_card.png',
 			traits: [
 				'感受性豊かで、愛することに一切の妥協なし',
 				'相手の色に染まりやすく、献身的な愛を注ぐ',
@@ -23,6 +25,7 @@
 		C28: {
 			kanji: '陽',
 			title: '天真爛漫な太陽 (The Sun)',
+			image: '/the_sun_card.png',
 			traits: [
 				'盛り上げ上手で周囲を明るくする天才',
 				'天下無双のバイタリティで突き進む',
@@ -34,6 +37,7 @@
 			kanji: '結',
 			id: 'C03',
 			title: '不屈の結び目 (The Knot)',
+			image: '/the_knot_card.png',
 			traits: [
 				'一度決めたら離さない、驚異の粘り強さ',
 				'「安定」こそが最大の幸福と信じている',
@@ -44,6 +48,7 @@
 		C30: {
 			kanji: '月',
 			title: '神秘の月 (The Moon)',
+			image: '/the_moon_card.png',
 			traits: [
 				'直感力に優れ、相手の本音を見抜く名人',
 				'ミステリアスな雰囲気で人を惹きつける',
@@ -100,12 +105,12 @@
 		<div class="mx-auto flex max-w-6xl items-center justify-between">
 			<div class="text-white font-['Shippori_Mincho',serif] text-lg font-bold">Enmusubi</div>
 			<ul class="hidden md:flex space-x-6">
-				<li><a href="#" class="text-white hover:text-gold transition-colors">Home</a></li>
-				<li><a href="#" class="text-white hover:text-gold transition-colors">About</a></li>
-				<li><a href="#" class="text-white hover:text-gold transition-colors">Contact</a></li>
+				<li><a href="/" class="text-white hover:text-gold transition-colors">Home</a></li>
+				<li><a href="/" class="text-white hover:text-gold transition-colors">About</a></li>
+				<li><a href="/" class="text-white hover:text-gold transition-colors">Contact</a></li>
 			</ul>
 			<div class="md:hidden">
-				<button class="text-white focus:outline-none">
+				<button class="text-white focus:outline-none" aria-label='bar'>
 					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
 					</svg>
@@ -232,6 +237,7 @@
 								{uBirth.replace(/-/g, '.')}
 							</div>
 						</div>
+						<img src={result.user.image} alt={result.user.title} class="w-full h-32 object-cover rounded mb-4" />
 						<h3
 							class="card-title m-0 border-b border-dashed border-gray-300 pb-2 font-['Shippori_Mincho',serif] text-xl"
 						>
@@ -265,6 +271,7 @@
 								{pBirth.replace(/-/g, '.')}
 							</div>
 						</div>
+						<img src={result.partner.image} alt={result.partner.title} class="w-full h-32 object-cover rounded mb-4" />
 						<h3
 							class="card-title m-0 border-b border-dashed border-gray-300 pb-2 font-['Shippori_Mincho',serif] text-xl"
 						>
