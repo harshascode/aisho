@@ -1,325 +1,185 @@
 <script lang="ts">
-	import { fly, fade, slide } from 'svelte/transition';
+    import { fly, fade, scale } from 'svelte/transition';
 
-	// --- 1. DATA TIER ---
-	interface Profile {
-		id?: string;
-		title: string;
-		kanji: string;
-		image: string;
-		traits: string[];
-	}
+    // --- 1. DATA TIER (Stayed the same) ---
+    interface Profile {
+        id?: string;
+        title: string;
+        kanji: string;
+        image: string;
+        traits: string[];
+    }
 
-	const PROFILES: Record<string, Profile> = {
-		C46: {
-			kanji: '心',
-			title: '純粋な心 (The Heart)',
-			image: '/the_heart_card.png',
-			traits: [
-				'感受性豊かで、愛することに一切の妥協なし',
-				'相手の色に染まりやすく、献身的な愛を注ぐ',
-				'実は独占欲が強く、寂しがりやな一面も',
-				'心の拠り所を見つけると、無敵の強さを発揮'
-			]
-		},
-		C28: {
-			kanji: '陽',
-			title: '天真爛漫な太陽 (The Sun)',
-			image: '/the_sun_card.png',
-			traits: [
-				'盛り上げ上手で周囲を明るくする天才',
-				'天下無双のバイタリティで突き進む',
-				'注目度はピカイチ！華があって目立っちゃう',
-				'その一方で実はデリケート。人生ドラマチック'
-			]
-		},
-		C03: {
-			kanji: '結',
-			id: 'C03',
-			title: '不屈の結び目 (The Knot)',
-			image: '/the_knot_card.png',
-			traits: [
-				'一度決めたら離さない、驚異の粘り強さ',
-				'「安定」こそが最大の幸福と信じている',
-				'身内枠に認定したら、徹底的に守り抜く',
-				'変化には弱いが、継続させる力は世界一'
-			]
-		},
-		C30: {
-			kanji: '月',
-			title: '神秘の月 (The Moon)',
-			image: '/the_moon_card.png',
-			traits: [
-				'直感力に優れ、相手の本音を見抜く名人',
-				'ミステリアスな雰囲気で人を惹きつける',
-				'気分屋に見えて、実は深い愛の持ち主',
-				'夜の静寂の中で、本当の自分を解放する'
-			]
-		}
-	};
+    const PROFILES: Record<string, Profile> = {
+        C46: { kanji: '心', title: '純粋な心', image: 'https://images.unsplash.com/photo-1528164344705-4754268799af?auto=format&fit=crop&q=80&w=200', traits: ['感受性豊かで、愛することに一切の妥協なし', '相手の色に染まりやすく、献身的な愛を注ぐ'] },
+        C28: { kanji: '陽', title: '天真爛漫な太陽', image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=200', traits: ['盛り上げ上手で周囲を明るくする天才', '天下無双のバイタリティで突き進む'] },
+        C03: { kanji: '結', title: '不屈の結び目', image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=200', traits: ['一度決めたら離さない、驚異の粘り強さ', '「安定」こそが最大の幸福と信じている'] },
+        C30: { kanji: '月', title: '神秘の月', image: 'https://images.unsplash.com/photo-1509130298739-651801c76e96?auto=format&fit=crop&q=80&w=200', traits: ['直感力に優れ、相手の本音を見抜く名人', 'ミステリアスな雰囲気で人を惹きつける'] }
+    };
 
-	// --- 2. STATE ---
-	let uBirth = $state('2000-01-01');
-	let pBirth = $state('2000-01-02');
-	let isCalculating = $state(false);
-	let result = $state<any>(null);
+    // --- 2. STATE ---
+    let uBirth = $state('2000-01-01');
+    let pBirth = $state('2000-01-02');
+    let isCalculating = $state(false);
+    let result = $state<any>(null);
 
-	function getCard(date: string) {
-		// Simple logic mock
-		const sum = date
-			.replace(/\D/g, '')
-			.split('')
-			.reduce((acc, n) => acc + parseInt(n), 0);
-		const keys = Object.keys(PROFILES);
-		return PROFILES[keys[sum % keys.length]];
-	}
+    function getCard(date: string) {
+        const sum = date.replace(/\D/g, '').split('').reduce((acc, n) => acc + parseInt(n), 0);
+        const keys = Object.keys(PROFILES);
+        return PROFILES[keys[sum % keys.length]];
+    }
 
-	async function runAppraisal() {
-		isCalculating = true;
-		// Simulate "Ritual" time
-		await new Promise((r) => setTimeout(r, 2000));
+    async function runAppraisal() {
+        isCalculating = true;
+        await new Promise((r) => setTimeout(r, 2000));
+        result = {
+            user: getCard(uBirth),
+            partner: getCard(pBirth),
+            compatibility: '二人の魂は深く結びついています。互いの違いを慈しむことで、より強固な縁となるでしょう。',
+            score: 8.5
+        };
+        isCalculating = false;
+    }
 
-		result = {
-			user: getCard(uBirth),
-			partner: getCard(pBirth),
-			compatibility:
-				'相手の自信に満ちた雰囲気に夢中になりやすい関係。好きだからといって何でも従うのではなく、自分の意見も大切に。',
-			score: 7
-		};
-		isCalculating = false;
-	}
-
-	function reset() {
-		result = null;
-		isCalculating = false;
-	}
+    function reset() { result = null; isCalculating = false; }
 </script>
 
-<div
-	class="relative flex min-h-screen flex-col overflow-x-hidden bg-bg font-['Zen_Kaku_Gothic_New',sans-serif] text-dark"
->
-	<div
-		class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(var(--color-gold)_1px,transparent_1px)] bg-size-[30px_30px] opacity-40"
-	></div>
-	<nav class="bg-vermilion p-4 shadow-md">
-		<div class="mx-auto flex max-w-6xl items-center justify-between">
-			<div class="text-white font-['Shippori_Mincho',serif] text-lg font-bold">Enmusubi</div>
-			<ul class="hidden md:flex space-x-6">
-				<li><a href="/" class="text-white hover:text-gold transition-colors">Home</a></li>
-				<li><a href="/" class="text-white hover:text-gold transition-colors">About</a></li>
-				<li><a href="/" class="text-white hover:text-gold transition-colors">Contact</a></li>
-			</ul>
-			<div class="md:hidden">
-				<button class="text-white focus:outline-none" aria-label='bar'>
-					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-					</svg>
-				</button>
-			</div>
-		</div>
-	</nav>
-	<header class="px-4 pt-12 pb-4 text-center">
-		<div
-			class="mx-auto mb-4 flex h-12 w-12 rotate-45 items-center justify-center rounded-lg bg-vermilion font-['Shippori_Mincho',serif] text-xl text-white shadow-lg shadow-vermilion/30"
-		>
-			縁
-		</div>
-		<h1 class="m-0 font-['Shippori_Mincho',serif] text-xl tracking-wider text-vermilion">
-			縁結び相性診断
-		</h1>
-		<p class="mt-2 text-xs tracking-widest text-gray-500 uppercase">DESTINY APPRAISAL</p>
-	</header>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700&family=Zen+Old+Mincho&display=swap');
+    
+    .washi-bg {
+        background-color: #fdfcf0;
+        background-image: url("https://www.transparenttextures.com/patterns/p6.png"); /* Subtle paper grain */
+    }
 
-	<main class="relative mx-auto w-full max-w-3xl flex-1 p-4 pb-16">
-		{#if isCalculating}
-			<div
-				class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/90"
-				in:fade
-			>
-				<div
-					class="h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-vermilion"
-				></div>
-				<p class="mt-4 animate-pulse font-['Shippori_Mincho',serif] text-vermilion">
-					運命を紐解いています...
-				</p>
-			</div>
-		{:else if !result}
-			<div class="input-section" in:fly={{ y: 20, duration: 600 }}>
-				<div class="card-couple flex flex-col gap-0 md:flex-row md:items-center md:gap-4">
-					<div
-						class="input-card relative flex-1 rounded-none border border-gray-50 bg-paper p-8 text-center shadow-card transition-transform focus-within:border-vermilion focus-within:shadow-soft"
-					>
-						<div
-							class="icon-stamp user-stamp mx-auto mb-4 flex h-8 w-8 items-center justify-center rounded-full bg-gray-800 font-['Shippori_Mincho',serif] text-sm text-white"
-						>
-							私
-						</div>
-						<h2 class="label mb-2 text-sm font-bold text-gray-500">あなたの生年月日</h2>
-						<div
-							class="date-wrapper border-b-2 border-gray-300 transition-all focus-within:border-vermilion"
-						>
-							<input
-								type="date"
-								bind:value={uBirth}
-								class="date-input w-full border-none bg-transparent p-2 text-center font-['Shippori_Mincho',serif] text-lg text-dark outline-none"
-							/>
-						</div>
-					</div>
+    .mizuhiki-line {
+        background: linear-gradient(to bottom, transparent 45%, #b12b28 45%, #b12b28 55%, transparent 55%);
+        height: 2px;
+        width: 100%;
+        position: relative;
+    }
 
-					<div
-						class="connection-knot z-10 -my-2.5 flex flex-col items-center justify-center text-vermilion md:-mx-5 md:flex-row"
-					>
-						<span class="line h-5 w-0.5 bg-gray-300 md:h-0.5 md:w-5"></span>
-						<span class="heart bg-white px-1.5 text-lg">♥</span>
-						<span class="line h-5 w-0.5 bg-gray-300 md:h-0.5 md:w-5"></span>
-					</div>
+    .mizuhiki-line::after {
+        content: '';
+        position: absolute;
+        top: 4px;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: #c5a059; /* Gold line */
+    }
 
-					<div
-						class="input-card relative flex-1 rounded-none border border-gray-50 bg-paper p-8 text-center shadow-card transition-transform focus-within:border-vermilion focus-within:shadow-soft"
-					>
-						<div
-							class="icon-stamp partner-stamp mx-auto mb-4 flex h-8 w-8 items-center justify-center rounded-full bg-vermilion font-['Shippori_Mincho',serif] text-sm text-white"
-						>
-							彼
-						</div>
-						<h2 class="label mb-2 text-sm font-bold text-gray-500">相手の生年月日</h2>
-						<div
-							class="date-wrapper border-b-2 border-gray-300 transition-all focus-within:border-vermilion"
-						>
-							<input
-								type="date"
-								bind:value={pBirth}
-								class="date-input w-full border-none bg-transparent p-2 text-center font-['Shippori_Mincho',serif] text-lg text-dark outline-none"
-							/>
-						</div>
-					</div>
-				</div>
+    .shuin-stamp {
+        border: 3px solid #b12b28;
+        color: #b12b28;
+        transform: rotate(-5deg);
+        display: inline-block;
+        padding: 4px 12px;
+        font-family: 'Shippori Mincho', serif;
+        font-weight: bold;
+        border-radius: 4px;
+        background: rgba(177, 43, 40, 0.05);
+    }
+</style>
 
-				<button
-					onclick={runAppraisal}
-					class="relative mt-8 block w-full cursor-pointer overflow-hidden rounded-md border-none bg-vermilion p-6 text-base font-bold tracking-wider text-white shadow-lg shadow-vermilion/40 transition-transform active:scale-95"
-				>
-					<span class="btn-text">相性を診断する</span>
-					<span class="btn-shine"></span>
-				</button>
-			</div>
-		{:else}
-			<div class="results-section" in:fly={{ y: 50, duration: 800 }}>
-				<div class="score-card mb-12 rounded-xl bg-white p-8 text-center shadow-card">
-					<div class="score-label mb-2 text-sm text-gray-500">二人の相性</div>
-					<div class="score-display font-['Shippori_Mincho',serif] leading-none text-vermilion">
-						<span class="score-num text-6xl font-bold">{result.score * 10}</span>
-						<span class="score-unit text-xl">%</span>
-					</div>
-					<div class="meter-bar mt-4 h-1.5 overflow-hidden rounded bg-gray-300">
-						<div
-							class="fill h-full rounded bg-linear-to-r from-pink-300 to-vermilion transition-all duration-1000 ease-out"
-							style="width: {result.score * 10}%"
-						></div>
-					</div>
-				</div>
+<div class="washi-bg min-h-screen font-['Zen_Old_Mincho',serif] text-[#333]">
+    <header class="py-10 text-center relative">
+        <!-- <div class="mizuhiki-line absolute bottom-0 left-0"></div> -->
+        <div class="inline-block border-2 border-[#b12b28] p-1 mb-4">
+            <div class="bg-[#b12b28] text-white px-4 py-1 text-sm tracking-widest">
+                開運招福
+            </div>
+        </div>
+        <h1 class="text-3xl font-bold font-['Shippori_Mincho'] text-[#b12b28] tracking-tighter">
+            縁結び相性診断
+        </h1>
+        <p class="text-[10px] mt-1 text-[#c5a059] font-bold tracking-[0.3em]">THE RED THREAD OF FATE</p>
+    </header>
 
-				<div class="cards-grid grid grid-cols-1 gap-6 md:grid-cols-2">
-					<div
-						class="result-card user-bg relative overflow-hidden border border-gray-50 bg-white p-8 shadow-card before:absolute before:top-0 before:right-0 before:left-0 before:h-1 before:bg-gray-800"
-					>
-						<div
-							class="watermark pointer-events-none absolute -top-2.5 -right-2.5 font-['Shippori_Mincho',serif] text-8xl font-bold opacity-5"
-						>
-							{result.user.kanji}
-						</div>
-						<div class="card-header mb-4 flex items-center justify-between">
-							<span
-								class="role-badge rounded bg-gray-100 px-2 py-0.5 text-xs font-bold text-gray-600"
-								>あなた</span
-							>
-							<div class="birth-display font-['Inter',sans-serif] text-sm text-gray-400">
-								{uBirth.replace(/-/g, '.')}
-							</div>
-						</div>
-						<img src={result.user.image} alt={result.user.title} class="w-full h-32 object-cover rounded mb-4" />
-						<h3
-							class="card-title m-0 border-b border-dashed border-gray-300 pb-2 font-['Shippori_Mincho',serif] text-xl"
-						>
-							{result.user.title}
-						</h3>
-						<ul class="trait-list m-0 list-none p-0">
-							{#each result.user.traits as trait}
-								<li
-									class="relative mb-2 pl-4 text-sm leading-relaxed before:absolute before:left-0 before:text-vermilion before:content-['•']"
-								>
-									{trait}
-								</li>
-							{/each}
-						</ul>
-					</div>
+    <main class="max-w-4xl mx-auto p-6">
+        {#if isCalculating}
+            <div class="py-20 text-center" in:fade>
+                <div class="relative w-24 h-24 mx-auto mb-6">
+                    <div class="absolute inset-0 border-4 border-[#b12b28]/20 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-t-[#b12b28] rounded-full animate-spin"></div>
+                    <div class="absolute inset-0 flex items-center justify-center font-bold text-[#b12b28]">縁</div>
+                </div>
+                <p class="font-['Shippori_Mincho'] text-[#b12b28] animate-pulse">運命の糸をたぐり寄せています...</p>
+            </div>
+        {:else if !result}
+            <div class="grid md:grid-cols-2 gap-12 mt-8 items-center relative" in:fly={{y: 20}}>
+                <div class="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
+                    <svg width="120" height="40" viewBox="0 0 120 40">
+                        <path d="M0,20 Q30,0 60,20 T120,20" fill="none" stroke="#b12b28" stroke-width="2" stroke-dasharray="4" />
+                    </svg>
+                </div>
 
-					<div
-						class="result-card partner-bg relative overflow-hidden border border-gray-50 bg-white p-8 shadow-card before:absolute before:top-0 before:right-0 before:left-0 before:h-1 before:bg-vermilion"
-					>
-						<div
-							class="watermark pointer-events-none absolute -top-2.5 -right-2.5 font-['Shippori_Mincho',serif] text-8xl font-bold opacity-5"
-						>
-							{result.partner.kanji}
-						</div>
-						<div class="card-header mb-4 flex items-center justify-between">
-							<span
-								class="role-badge rounded bg-gray-100 px-2 py-0.5 text-xs font-bold text-gray-600"
-								>相手</span
-							>
-							<div class="birth-display font-['Inter',sans-serif] text-sm text-gray-400">
-								{pBirth.replace(/-/g, '.')}
-							</div>
-						</div>
-						<img src={result.partner.image} alt={result.partner.title} class="w-full h-32 object-cover rounded mb-4" />
-						<h3
-							class="card-title m-0 border-b border-dashed border-gray-300 pb-2 font-['Shippori_Mincho',serif] text-xl"
-						>
-							{result.partner.title}
-						</h3>
-						<ul class="trait-list m-0 list-none p-0">
-							{#each result.partner.traits as trait}
-								<li
-									class="relative mb-2 pl-4 text-sm leading-relaxed before:absolute before:left-0 before:text-vermilion before:content-['•']"
-								>
-									{trait}
-								</li>
-							{/each}
-						</ul>
-					</div>
-				</div>
+                <div class="bg-white/60 border-t-4 border-b-4 border-[#333] p-8 shadow-sm relative z-10">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#333] text-white px-4 py-0.5 text-xs">あなた</div>
+                    <label class="block text-center mb-4 text-sm text-gray-500 font-bold uppercase tracking-widest">Your Birth</label>
+                    <input type="date" bind:value={uBirth} class="w-full bg-transparent text-center text-2xl border-none outline-none focus:ring-0 font-['Shippori_Mincho']" />
+                </div>
 
-				<div
-					class="advice-scroll mt-12 border-l-4 border-vermilion bg-white bg-[url('https://www.transparenttextures.com/patterns/handmade-paper.png')] p-8 shadow-card"
-				>
-					<h3 class="advice-title m-0 mb-2 font-['Shippori_Mincho',serif] text-vermilion">
-						天の声
-					</h3>
-					<p class="advice-text text-base leading-relaxed text-gray-600">{result.compatibility}</p>
-				</div>
+                <div class="bg-white/60 border-t-4 border-b-4 border-[#b12b28] p-8 shadow-sm relative z-10">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#b12b28] text-white px-4 py-0.5 text-xs">お相手</div>
+                    <label class="block text-center mb-4 text-sm text-gray-500 font-bold uppercase tracking-widest">Partner's Birth</label>
+                    <input type="date" bind:value={pBirth} class="w-full bg-transparent text-center text-2xl border-none outline-none focus:ring-0 font-['Shippori_Mincho']" />
+                </div>
+            </div>
 
-				<div class="actions mt-12 text-center">
-					<div class="share-buttons mb-8 flex justify-center gap-2.5">
-						<button
-							class="share x cursor-pointer rounded-full border-none bg-black px-6 py-2.5 text-sm font-bold text-white"
-							>Post</button
-						>
-						<button
-							class="share line cursor-pointer rounded-full border-none bg-green-500 px-6 py-2.5 text-sm font-bold text-white"
-							>LINE</button
-						>
-					</div>
-					<button
-						onclick={reset}
-						class="retry-btn cursor-pointer border-none bg-none text-sm text-gray-500 underline"
-						>もう一度占う</button
-					>
-				</div>
-			</div>
-		{/if}
-	</main>
+            <button onclick={runAppraisal} class="mt-16 w-full max-w-sm mx-auto block bg-[#b12b28] hover:bg-[#8e221f] text-white py-5 px-10 rounded-full shadow-xl transition-all hover:scale-105 active:scale-95 group">
+                <span class="flex items-center justify-center gap-3 font-bold tracking-widest text-lg">
+                    二人の縁を占う
+                    <span class="group-hover:translate-x-1 transition-transform">→</span>
+                </span>
+            </button>
+        {:else}
+            <div class="space-y-10" in:fade>
+                <div class="text-center bg-white/80 p-10 border border-[#c5a059]/30 rounded-3xl shadow-inner">
+                    <div class="shuin-stamp mb-4">大吉相性</div>
+                    <div class="flex items-center justify-center gap-4">
+                        <div class="h-[1px] bg-[#c5a059] flex-1"></div>
+                        <h2 class="text-6xl font-['Shippori_Mincho'] font-bold text-[#b12b28]">
+                            {result.score * 10}<span class="text-2xl ml-1">%</span>
+                        </h2>
+                        <div class="h-[1px] bg-[#c5a059] flex-1"></div>
+                    </div>
+                    <p class="mt-6 text-lg leading-relaxed max-w-xl mx-auto italic text-gray-600">
+                        「{result.compatibility}」
+                    </p>
+                </div>
 
-	<footer class="py-8 text-center text-xs text-gray-400">
-		© 2026 Enmusubi. All rights reserved.
-	</footer>
+                <div class="grid md:grid-cols-2 gap-6">
+                    {#each [result.user, result.partner] as profile, i}
+                        <div class="bg-white p-6 shadow-md border-l-8 {i === 0 ? 'border-[#333]' : 'border-[#b12b28]'}">
+                            <div class="flex items-start gap-4">
+                                <div class="text-5xl font-['Shippori_Mincho'] text-[#b12b28] opacity-20 select-none">{profile.kanji}</div>
+                                <div>
+                                    <h3 class="text-xl font-bold font-['Shippori_Mincho'] mb-3">{profile.title}</h3>
+                                    <ul class="space-y-2 text-sm text-gray-600">
+                                        {#each profile.traits as trait}
+                                            <li class="flex gap-2">
+                                                <span class="text-[#c5a059]">◆</span> {trait}
+                                            </li>
+                                        {/each}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {/each}
+                </div>
+
+                <div class="text-center pt-10">
+                    <button onclick={reset} class="text-[#b12b28] font-bold border-b border-[#b12b28] pb-1 hover:opacity-70 transition-opacity">
+                        もう一度占う
+                    </button>
+                </div>
+            </div>
+        {/if}
+    </main>
+
+    <footer class="mt-20 py-10 text-center text-[10px] tracking-widest text-gray-400">
+        <!-- <div class="mizuhiki-line absolute top-0 left-0"></div> -->
+        © 2026 ENMUSUBI APPRAISAL OFFICE
+    </footer>
 </div>
