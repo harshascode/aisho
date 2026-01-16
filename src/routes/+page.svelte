@@ -52,23 +52,6 @@
         background-image: url("https://www.transparenttextures.com/patterns/p6.png"); /* Subtle paper grain */
     }
 
-    .mizuhiki-line {
-        background: linear-gradient(to bottom, transparent 45%, #b12b28 45%, #b12b28 55%, transparent 55%);
-        height: 2px;
-        width: 100%;
-        position: relative;
-    }
-
-    .mizuhiki-line::after {
-        content: '';
-        position: absolute;
-        top: 4px;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background: #c5a059; /* Gold line */
-    }
-
     .shuin-stamp {
         border: 3px solid #b12b28;
         color: #b12b28;
