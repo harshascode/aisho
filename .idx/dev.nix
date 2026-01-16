@@ -9,6 +9,7 @@
     pkgs.nodejs_21
     pkgs.nodePackages.nodemon
     pkgs.bun
+    pkgs.fnm
   ];
   # Sets environment variables in the workspace
   env = {};
