@@ -11,10 +11,10 @@
     }
 
     const PROFILES: Record<string, Profile> = {
-        C46: { kanji: '心', title: '純粋な心', image: 'https://images.unsplash.com/photo-1528164344705-4754268799af?auto=format&fit=crop&q=80&w=200', traits: ['感受性豊かで、愛することに一切の妥協なし', '相手の色に染まりやすく、献身的な愛を注ぐ'] },
-        C28: { kanji: '陽', title: '天真爛漫な太陽', image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=200', traits: ['盛り上げ上手で周囲を明るくする天才', '天下無双のバイタリティで突き進む'] },
-        C03: { kanji: '結', title: '不屈の結び目', image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=200', traits: ['一度決めたら離さない、驚異の粘り強さ', '「安定」こそが最大の幸福と信じている'] },
-        C30: { kanji: '月', title: '神秘の月', image: 'https://images.unsplash.com/photo-1509130298739-651801c76e96?auto=format&fit=crop&q=80&w=200', traits: ['直感力に優れ、相手の本音を見抜く名人', 'ミステリアスな雰囲気で人を惹きつける'] }
+        C46: { kanji: '心', title: '純粋な心', image: '/the_heart_card.png', traits: ['感受性豊かで、愛することに一切の妥協なし', '相手の色に染まりやすく、献身的な愛を注ぐ'] },
+        C28: { kanji: '陽', title: '天真爛漫な太陽', image: '/the_heart_card.png', traits: ['盛り上げ上手で周囲を明るくする天才', '天下無双のバイタリティで突き進む'] },
+        C03: { kanji: '結', title: '不屈の結び目', image: '/the_heart_card.png', traits: ['一度決めたら離さない、驚異の粘り強さ', '「安定」こそが最大の幸福と信じている'] },
+        C30: { kanji: '月', title: '神秘の月', image: '/the_heart_card.png', traits: ['直感力に優れ、相手の本音を見抜く名人', 'ミステリアスな雰囲気で人を惹きつける'] }
     };
 
     // --- 2. STATE ---
