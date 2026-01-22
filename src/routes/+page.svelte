@@ -273,7 +273,7 @@
                     { q: '相性の結果が悪かった場合、どうすればいいですか？', a: '相性は「固定」されたものではなく、理解し育てていくものです。診断結果はあくまで現在の二人の性質の組み合わせを示した指針です。違いを理解し、補い合うことで、どのような結果であっても良い関係を築くことは可能です。' }
                 ] as faq, i}
                     <div class="border-b border-[#333]/10 last:border-0">
-                        <button onclick={() => toggleFaq(i)} class="w-full text-left flex justify-between items-center py-5 hover:text-[#b12b28] transition-colors group">
+                        <button onclick={() => toggleFaq(i)} class="w-full text-left flex justify-between items-center py-5 hover:text-[#b12b28] transition-colors group cursor-pointer">
                             <span class="font-bold text-sm font-mincho flex items-center text-[#333] group-hover:text-[#b12b28]">
                                 <span class="bg-[#333] text-white text-[10px] px-2 py-1 rounded-sm mr-4 group-hover:bg-[#b12b28] transition-colors">Q</span>
                                 {faq.q}
